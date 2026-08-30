@@ -1,0 +1,31 @@
+
+{% extends "hotel/base.html" %}
+
+{% block title %}
+Dashboard
+{% endblock %}
+
+{% block page_title %}
+Dashboard
+{% endblock %}
+
+
+
+{% block content %}
+
+<div class="card">
+    <h3>Please update hotel details</h3>
+    <form method="POST" action="{% url 'hotel' %}">
+
+        {% csrf_token %}
+
+        {{ form.as_p }}
+
+        <button type="submit" class="btn btn-primary">
+        {% if user_id %}Update {% else %}Save {% endif %}
+        </button>
+
+    </form>
+</div>
+
+{% endblock %}

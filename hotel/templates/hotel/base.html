@@ -1,0 +1,84 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{% block title %}Django App{% endblock %}</title>
+
+    <link rel="stylesheet" href="{% static 'css/global.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+   
+
+    {% block extra_css %}{% endblock %}
+    
+</head>
+
+<body>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h2>ARYA HM</h2>
+        </div>
+
+        <nav class="sidebar-menu">
+         
+            <a href="#" class="menu-item">
+                📊 <span>Bookings</span>
+            </a>
+
+            <a href="{% url 'change_password' %}" class="menu-item">
+                📊 <span>Change Password</span>
+            </a>
+
+            <a href="#" class="menu-item">
+                ⚙️ <span>Settings</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <a href="{% url 'logout' %}" class="menu-item">
+                🚪 <span>Logout</span>
+            </a>
+        </div>
+    </aside>
+
+
+    <!-- Main Content -->
+    <main class="main-content">
+
+        <!-- Topbar -->
+        <header class="topbar">
+            <button class="menu-toggle" onclick="toggleSidebar()">
+                ☰
+            </button>
+
+            <h1>{% block page_title %}Dashboard{% endblock %}</h1>
+        </header>
+
+
+        <!-- Page Content -->
+        <section class="content">
+            {% block content %}
+            {% endblock %}
+        </section>
+
+    </main>
+
+
+    <script>
+        function toggleSidebar() {
+            document.querySelector(".sidebar").classList.toggle("active");
+        }
+    </script>
+
+    {% block extra_js %}{% endblock %}
+
+     script src="{% static 'js/popper.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+
+</body>
+</html>
