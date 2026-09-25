@@ -1,0 +1,29 @@
+```html
+{% extends "user/base.html" %}
+
+{% block title %}
+Dashboard
+{% endblock %}
+
+{% block page_title %}
+Dashboard
+{% endblock %}
+
+{% block content %}
+
+{{reservation.room.room_number}} {{reservation.check_in}} {{reservation.check_out}}
+<div class="container">
+  <div class="row">
+    <div class="col-sm-8">
+      One of three columns
+    </div>
+    <div class="col-sm-4">
+
+    </div>
+  </div>
+</div>
+
+
+
+
+{% endblock %}

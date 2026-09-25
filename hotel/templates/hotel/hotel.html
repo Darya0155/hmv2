@@ -1,5 +1,5 @@
 
-{% extends "hotel/base.html" %}
+{% extends "user/base.html" %}
 
 {% block title %}
 Dashboard
@@ -13,19 +13,19 @@ Dashboard
 
 {% block content %}
 
-<div class="card">
+
     <h3>Please update hotel details</h3>
-    <form method="POST" action="{% url 'hotel' %}">
+    <form method="POST" action="{% url 'hotel_info' %}">
 
         {% csrf_token %}
 
         {{ form.as_p }}
 
         <button type="submit" class="btn btn-primary">
-        {% if user_id %}Update {% else %}Save {% endif %}
+        {% if hotel %}Update {% else %}Save {% endif %}
         </button>
 
     </form>
-</div>
+
 
 {% endblock %}

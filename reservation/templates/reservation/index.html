@@ -1,0 +1,23 @@
+```html
+{% extends "user/base.html" %}
+
+{% block title %}
+Dashboard
+{% endblock %}
+
+{% block page_title %}
+Dashboard
+{% endblock %}
+
+{% block content %}
+
+<a href="{% url 'new_booking' %}">CheckIn</a>
+<br>
+{% for reservation in reservations %}
+{{reservation.room.room_number}} {{reservation.check_in}} {{reservation.check_out}} {{reservation.guest|length}}
+<a href="{% url 'add_guest' reservation.id %}">Add Guest</a>
+<br>
+{% endfor %}
+
+
+{% endblock %}

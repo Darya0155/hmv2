@@ -1,6 +1,9 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import logout
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.decorators import login_required
+
 
 # Create your views here.
 def signup(request):
@@ -22,11 +25,6 @@ def signup(request):
 def user_logout(request):
     logout(request)
     return redirect('login')
-
-
-from django.contrib.auth import update_session_auth_hash
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
 
 @login_required
 def change_password(request):

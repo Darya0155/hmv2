@@ -23,4 +23,7 @@ urlpatterns = [
     path("user/", include("user.urls")),
     path("user/", include("django.contrib.auth.urls")),
     path("", include("hotel.urls")),
+    path("room/", include("room.urls")),
+    path("guest/", include("guest.urls")),
+    path('reservation/', include('reservation.urls')),
 ]

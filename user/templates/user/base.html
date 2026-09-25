@@ -26,10 +26,20 @@
 
         <nav class="sidebar-menu">
          
-            <a href="#" class="menu-item">
-                📊 <span>Bookings</span>
+            <a href="{% url 'hotel_info' %}" class="menu-item">
+                📊 <span>Hotel Info</span>
             </a>
 
+            <a href="{% url 'room_view' %}" class="menu-item">
+                📊 <span>Rooms</span>
+            </a>
+
+            <a href="{% url 'guest_view' %}" class="menu-item">
+                📊 <span>Guest</span>
+            </a>
+            <a href="{% url 'reservation_view' %}" class="menu-item">
+                📊 <span>Booking</span>
+            </a>
             <a href="{% url 'change_password' %}" class="menu-item">
                 📊 <span>Change Password</span>
             </a>

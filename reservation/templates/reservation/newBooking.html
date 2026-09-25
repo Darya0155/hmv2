@@ -1,0 +1,26 @@
+```html
+{% extends "user/base.html" %}
+
+{% block title %}
+Dashboard
+{% endblock %}
+
+{% block page_title %}
+Dashboard
+{% endblock %}
+
+{% block content %}
+
+{% if available_rooms %}
+    <form method="POST">
+        {% csrf_token %}
+
+        {{ form.as_p }}
+
+        <button type="submit">Add Guest</button>
+    </form>
+{% else %}
+    <p>NO ROOM available</p>
+{% endif %}
+
+{% endblock %}

@@ -38,7 +38,10 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "user",
-    "hotel"
+    "hotel",
+    "room",
+    "guest",
+    "reservation"
 ]
 
 MIDDLEWARE = [
@@ -133,6 +136,6 @@ MAILERS = {
 
 
 
-LOGIN_REDIRECT_URL = "/hotel/"
+LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/user/login/"
 LOGIN_URL = "/user/login/"
