@@ -2,28 +2,812 @@
 {% extends "user/base.html" %}
 
 {% block title %}
-Dashboard
+Reservation #{{ reservation.id }}
 {% endblock %}
 
 {% block page_title %}
-Dashboard
+Reservation Details
 {% endblock %}
 
 {% block content %}
 
-{{reservation.room.room_number}} {{reservation.check_in}} {{reservation.check_out}}
-<div class="container">
-  <div class="row">
-    <div class="col-sm-8">
-      One of three columns
-    </div>
-    <div class="col-sm-4">
+<style>
+  :root {
+    --primary: #2563eb;
+    --primary-light: #eff6ff;
+    --success: #16a34a;
+    --danger: #dc2626;
+    --warning: #d97706;
+    --text: #111827;
+    --muted: #6b7280;
+    --border: #e5e7eb;
+    --background: #f8fafc;
+  }
+
+  .reservation-page {
+    background: var(--background);
+    padding: 24px 0 40px;
+    min-height: calc(100vh - 100px);
+  }
+
+  /* --------------------------------
+     Page Header
+  -------------------------------- */
+
+  .page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+
+  .page-header-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .back-button {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: white;
+    color: var(--text);
+    text-decoration: none;
+    transition: all 0.2s ease;
+  }
+
+  .back-button:hover {
+    background: #f3f4f6;
+    color: var(--primary);
+  }
+
+  .page-header h2 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .page-header p {
+    margin: 3px 0 0;
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  .reservation-id {
+    background: var(--primary-light);
+    color: var(--primary);
+    padding: 8px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+
+  /* --------------------------------
+     Main Cards
+  -------------------------------- */
+
+  .dashboard-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+    margin-bottom: 20px;
+    overflow: hidden;
+  }
+
+  .card-header-custom {
+    padding: 18px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .card-header-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .card-icon {
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    background: var(--primary-light);
+    color: var(--primary);
+    font-size: 16px;
+  }
+
+  .card-header-custom h5 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 650;
+    color: var(--text);
+  }
+
+  .card-header-custom small {
+    color: var(--muted);
+  }
+
+  .card-body-custom {
+    padding: 20px;
+  }
+
+
+  /* --------------------------------
+     Reservation Summary
+  -------------------------------- */
+
+  .reservation-summary {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+  }
+
+  .summary-item {
+    padding: 15px;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    background: #fafafa;
+  }
+
+  .summary-label {
+    color: var(--muted);
+    font-size: 12px;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  .summary-value {
+    color: var(--text);
+    font-size: 15px;
+    font-weight: 600;
+  }
+
+  .price-value {
+    color: var(--success);
+    font-size: 18px;
+  }
+
+
+  /* --------------------------------
+     Update Reservation
+  -------------------------------- */
+
+  .update-form {
+    margin-top: 18px;
+    padding-top: 18px;
+    border-top: 1px solid var(--border);
+  }
+
+  .update-form p {
+    margin-bottom: 12px;
+  }
+
+  .update-form label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 5px;
+  }
+
+  .update-form input,
+  .update-form select,
+  .update-form textarea {
+    width: 100%;
+    padding: 9px 11px;
+    border: 1px solid #d1d5db;
+    border-radius: 7px;
+    outline: none;
+    transition: all 0.2s ease;
+  }
+
+  .update-form input:focus,
+  .update-form select:focus,
+  .update-form textarea:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  }
+
+
+  /* --------------------------------
+     Guest Cards
+  -------------------------------- */
+
+  .guest-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .guest-card {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    transition: all 0.2s ease;
+  }
+
+  .guest-card:hover {
+    border-color: #d1d5db;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.04);
+  }
+
+  .guest-main {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    min-width: 0;
+  }
+
+  .guest-avatar {
+    width: 42px;
+    height: 42px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: var(--primary-light);
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+  }
+
+  .guest-name {
+    font-weight: 650;
+    color: var(--text);
+    margin-bottom: 3px;
+  }
+
+  .guest-meta {
+    color: var(--muted);
+    font-size: 13px;
+  }
+
+  .guest-details {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px 18px;
+    margin-top: 4px;
+  }
+
+  .guest-detail {
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  .guest-detail strong {
+    color: #4b5563;
+  }
+
+  .guest-actions {
+    flex-shrink: 0;
+  }
+
+
+  /* --------------------------------
+     Search Guest
+  -------------------------------- */
+
+  .search-form {
+    display: flex;
+    gap: 8px;
+  }
+
+  .search-form input {
+    flex: 1;
+    min-width: 0;
+    padding: 10px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 7px;
+    outline: none;
+  }
+
+  .search-form input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  }
+
+
+  /* --------------------------------
+     Search Results
+  -------------------------------- */
+
+  .search-results {
+    margin-top: 15px;
+  }
+
+  .search-result {
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    padding: 13px;
+    margin-bottom: 8px;
+  }
+
+  .search-result-name {
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+
+  .search-result-info {
+    color: var(--muted);
+    font-size: 12px;
+    margin-bottom: 9px;
+  }
+
+
+  /* --------------------------------
+     Divider
+  -------------------------------- */
+
+  .or-divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #9ca3af;
+    font-size: 12px;
+    font-weight: 700;
+    margin: 22px 0;
+  }
+
+  .or-divider::before,
+  .or-divider::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+
+  /* --------------------------------
+     New Guest Form
+  -------------------------------- */
+
+  .new-guest-form p {
+    margin-bottom: 12px;
+  }
+
+  .new-guest-form label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 5px;
+  }
+
+  .new-guest-form input,
+  .new-guest-form select,
+  .new-guest-form textarea {
+    width: 100%;
+    padding: 9px 10px;
+    border: 1px solid #d1d5db;
+    border-radius: 7px;
+    outline: none;
+  }
+
+  .new-guest-form input:focus,
+  .new-guest-form select:focus,
+  .new-guest-form textarea:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  }
+
+
+  /* --------------------------------
+     Transactions
+  -------------------------------- */
+
+  .transaction-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .transaction-table th {
+    text-align: left;
+    padding: 12px 15px;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--muted);
+    background: #f9fafb;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .transaction-table td {
+    padding: 13px 15px;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 13px;
+    color: #374151;
+  }
+
+  .transaction-table tr:last-child td {
+    border-bottom: 0;
+  }
+
+  .transaction-price {
+    font-weight: 650;
+    color: var(--text);
+  }
+
+  .transaction-state {
+    display: inline-block;
+    padding: 4px 9px;
+    border-radius: 20px;
+    background: #f0fdf4;
+    color: var(--success);
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+
+  /* --------------------------------
+     Empty State
+  -------------------------------- */
+
+  .empty-state {
+    padding: 35px 20px;
+    text-align: center;
+    color: var(--muted);
+  }
+
+  .empty-icon {
+    width: 48px;
+    height: 48px;
+    margin: 0 auto 12px;
+    border-radius: 50%;
+    background: #f3f4f6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #9ca3af;
+    font-size: 20px;
+  }
+
+
+  /* --------------------------------
+     Buttons
+  -------------------------------- */
+
+  .btn {
+    border-radius: 7px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .btn-primary {
+    background: var(--primary);
+    border-color: var(--primary);
+  }
+
+  .btn-primary:hover {
+    background: #1d4ed8;
+    border-color: #1d4ed8;
+  }
+
+
+  /* --------------------------------
+     Responsive
+  -------------------------------- */
+
+  @media (max-width: 991px) {
+
+    .reservation-summary {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+  }
+
+  @media (max-width: 767px) {
+
+    .reservation-page {
+      padding: 15px 0 30px;
+    }
+
+    .page-header {
+      align-items: flex-start;
+    }
+
+    .page-header h2 {
+      font-size: 20px;
+    }
+
+    .reservation-id {
+      display: none;
+    }
+
+    .reservation-summary {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .guest-card {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+
+    .guest-actions {
+      width: 100%;
+    }
+
+    .guest-actions form,
+    .guest-actions button {
+      width: 100%;
+    }
+
+    .search-form {
+      flex-direction: column;
+    }
+
+    .search-form button {
+      width: 100%;
+    }
+
+    .transaction-table {
+      min-width: 650px;
+    }
+
+    .transaction-wrapper {
+      overflow-x: auto;
+    }
+
+  }
+
+  @media (max-width: 450px) {
+
+    .reservation-summary {
+      grid-template-columns: 1fr;
+    }
+
+  }
+</style>
+
+
+<div class="reservation-page">
+
+  <div class="container-fluid px-3 px-md-4">
+
+    <!-- ==========================================
+         PAGE HEADER
+    =========================================== -->
+
+    <div class="page-header">
+
+      <div class="page-header-left">
+
+        <a
+          href="{% url 'reservation_view' %}"
+          class="back-button"
+          title="Back to reservations"
+        >
+          ←
+        </a>
+
+        <div>
+          <h2>Reservation Details</h2>
+          <p>Manage booking, guests and transactions</p>
+        </div>
+
+      </div>
+
+      <div class="reservation-id">
+        Reservation #{{ reservation.id }}
+      </div>
 
     </div>
+
+
+    <div class="row g-4">
+
+      <!-- ==========================================
+           LEFT COLUMN
+      =========================================== -->
+
+      <div class="col-lg-8">
+
+
+        <!-- ======================================
+             RESERVATION DETAILS
+        ======================================= -->
+
+        <div class="dashboard-card">
+
+          <div class="card-header-custom">
+
+            <div class="card-header-title">
+
+              <div class="card-icon">
+                🏨
+              </div>
+
+              <div class="row">
+                <div class="col-10">
+                  <h5>Reservation Details</h5>
+                  <small>Booking information</small>
+                </div>
+                <div class="col-2">
+                  <small>
+                    <a class="btn btn-primary" href="{% url 'checkout_view' reservation.id %}" > Checkout </a>
+                  </small>
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <div class="card-body-custom">
+
+            <div class="reservation-summary">
+
+              <div class="summary-item">
+
+                <div class="summary-label">
+                  Room
+                </div>
+
+                <div class="summary-value">
+                  Room {{ reservation.room.room_number }}
+                </div>
+
+              </div>
+
+
+              <div class="summary-item">
+
+                <div class="summary-label">
+                  Check In
+                </div>
+
+                <div class="summary-value">
+                  {{ reservation.check_in }}
+                </div>
+
+              </div>
+
+
+              <div class="summary-item">
+
+                <div class="summary-label">
+                  Check Out
+                </div>
+
+                <div class="summary-value">
+                  {{ reservation.check_out }}
+                </div>
+
+              </div>
+
+
+              <div class="summary-item">
+
+                <div class="summary-label">
+                  Duration
+                </div>
+
+                <div class="summary-value">
+                  {{ reservation.days }} day{{ reservation.days|pluralize }}
+                </div>
+
+              </div>
+
+
+              <div class="summary-item">
+
+                <div class="summary-label">
+                  Total Amount
+                </div>
+
+                <div class="summary-value price-value">
+                  ₹{{ total_price }}
+                </div>
+
+              </div>
+               <div class="summary-item">
+
+                <div class="summary-label">
+                  Balance Amount
+                </div>
+
+                <div class="summary-value price-value">
+                  ₹{{ balance }}
+                </div>
+
+              </div>
+
+            </div>
+
+
+            <!-- Update Reservation -->
+
+            <div class="update-form">
+
+              <div class="mb-3">
+
+                <strong style="font-size: 14px;">
+                  Update Reservation
+                </strong>
+
+                <div style="font-size: 12px; color: #6b7280;">
+                  Change booking information if required.
+                </div>
+
+              </div>
+
+              <form method="POST">
+
+                {% csrf_token %}
+
+                {{ reservation_update_form.as_p }}
+
+                <button
+                  type="submit"
+                  class="btn btn-primary px-4"
+                >
+                  Update Reservation
+                </button>
+
+              </form>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- ======================================
+             CURRENT GUESTS
+        ======================================= -->
+        {% include "guest/view_current_guest_c.html" %}
+
+
+
+        <!-- ======================================
+             TRANSACTIONS
+        ======================================= -->
+
+        {% include "transactions/view_transactions_c.html" %}
+
+      </div>
+
+
+      <!-- ==========================================
+           RIGHT COLUMN
+      =========================================== -->
+
+      <div class="col-lg-4">
+
+      {% include 'reservation/editBooking_addon_transaction_c.html' %}
+        <!-- ======================================
+             SEARCH EXISTING GUEST
+        ======================================= -->
+
+      {% include 'reservation/editBooking_guest_c.html' %}
+
+      </div>
+
+    </div>
+
   </div>
+
 </div>
-
-
-
 
 {% endblock %}

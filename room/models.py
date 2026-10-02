@@ -1,4 +1,6 @@
 from django.db import models
+from django.db.models.query_utils import Q
+
 from hotel.models import Hotel
 
 # Create your models here.
@@ -56,3 +58,7 @@ class Room(models.Model):
     @staticmethod
     def get_available_rooms():
         return Room.objects.filter(status=RoomStatus.AVAILABLE)
+    @staticmethod
+    def find_room_by_number(hotel,number):
+        return Room.objects.get(Q(hotel=hotel) & Q(room_number=number))
+

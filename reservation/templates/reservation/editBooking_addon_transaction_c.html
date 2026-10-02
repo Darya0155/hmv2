@@ -1,0 +1,41 @@
+        <div class="dashboard-card">
+          <div class="card-header-custom">
+            <div class="card-header-title">
+              <div class="card-icon">
+                🔎
+              </div>
+              <div>
+                <h5>Add Addon</h5>
+              </div>
+            </div>
+          </div>
+
+
+          <div class="card-body-custom">
+
+           <form method="POST">
+          {% csrf_token%}
+          <select name="addon">
+            {% for addon in addons %}
+            <option value="{{addon.id}}">{{addon|upper}}</option>
+            {% endfor %}
+          </select>
+          {{addon_transaction_form.as_p}}
+          <button type="submit">
+            ADD
+          </button>
+
+        </form>
+
+          </div>
+
+        </div>
+
+
+        <!-- ======================================
+             OR
+        ======================================= -->
+
+        <div class="or-divider">
+
+        </div>

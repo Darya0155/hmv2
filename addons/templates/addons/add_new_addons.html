@@ -1,0 +1,36 @@
+{% extends "user/base.html" %}
+
+{% block title %}
+Dashboard
+{% endblock %}
+
+{% block page_title %}
+Dashboard
+{% endblock %}
+
+{% block content %}
+
+
+
+        {% if error %}
+            <div class="error">
+                {{ error }}
+            </div>
+        {% endif %}
+
+        <form method="POST">
+            {% csrf_token %}
+
+        {{add_on_forms.as_p}}
+            <button type="submit">
+                save
+            </button>
+
+        </form>
+
+
+    </div>
+
+{% endblock %}
+
+      

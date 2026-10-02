@@ -14,9 +14,7 @@ Dashboard
 {% if available_rooms %}
     <form method="POST">
         {% csrf_token %}
-
         {{ form.as_p }}
-
         <button type="submit">Add Guest</button>
     </form>
 {% else %}

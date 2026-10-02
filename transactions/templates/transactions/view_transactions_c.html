@@ -1,0 +1,104 @@
+<div class="dashboard-card">
+
+          <div class="card-header-custom">
+
+            <div class="card-header-title">
+
+              <div class="card-icon">
+                ₹
+              </div>
+
+              <div>
+                <h5>Transactions</h5>
+                <small>Charges and billing details</small>
+              </div>
+
+            </div>
+
+          </div>
+
+
+          {% if transactions %}
+
+            <div class="transaction-wrapper">
+
+              <table class="transaction-table">
+
+                <thead>
+
+                  <tr>
+                    <th>Type</th>
+                    <th>Details</th>
+                    <th>Quantity</th>
+                    <th>State Tax</th>
+                    <th>Central Tax</th>
+                    <th>Total</th>
+                    <th>Action</th>
+                  </tr>
+
+                </thead>
+
+                <tbody>
+
+                  {% for i in transactions %}
+
+                    <tr>
+
+                      <td>
+                        <strong>{{ i.type }}</strong>
+                      </td>
+
+                      <td>
+                        {{ i.details }}
+                      </td>
+
+                      <td>
+                        {{ i.quantity }}
+                      </td>
+
+                      <td>
+                        {{ i.state_tax_percentage }}%
+                      </td>
+
+                      <td>
+                        {{ i.central_tax_percentage }}%
+                      </td>
+
+                      <td class="transaction-price">
+                        ₹{{ i.total_price }}
+                      </td>
+                      <td class="transaction-price">
+                        <a href="{% url 'edit_transaction_view' i.id %}"  class="btn btn-outline-danger btn-sm">Edit</a>
+                      </td>
+
+                    </tr>
+
+                  {% endfor %}
+
+                </tbody>
+
+              </table>
+
+            </div>
+
+          {% else %}
+
+            <div class="empty-state">
+
+              <div class="empty-icon">
+                ₹
+              </div>
+
+              <div style="font-weight: 600; color: #374151;">
+                No transactions
+              </div>
+
+              <div style="font-size: 13px;">
+                No billing transactions have been recorded.
+              </div>
+
+            </div>
+
+          {% endif %}
+
+        </div>

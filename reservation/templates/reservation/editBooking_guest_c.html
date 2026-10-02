@@ -1,0 +1,148 @@
+        <div class="dashboard-card">
+
+          <div class="card-header-custom">
+
+            <div class="card-header-title">
+
+              <div class="card-icon">
+                🔎
+              </div>
+
+              <div>
+                <h5>Add Existing Guest</h5>
+                <small>Search by ID</small>
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <div class="card-body-custom">
+
+            <form method="GET" class="search-form">
+
+              <input
+                type="text"
+                id="guest_search"
+                name="guest_search"
+                placeholder="Enter ID value"
+                value="{{ request.GET.guest_search|default:'' }}"
+              >
+
+              <button
+                type="submit"
+                class="btn btn-primary px-3"
+              >
+                Search
+              </button>
+
+            </form>
+
+
+            {% if guest_search_list %}
+
+              <div class="search-results">
+
+                {% for guest in guest_search_list %}
+
+                  <div class="search-result">
+
+                    <div class="search-result-name">
+                      {{ guest.name }}
+                    </div>
+
+                    <div class="search-result-info">
+
+                      {{ guest.id_type }} -
+                      {{ guest.id_value }}
+
+                      <br>
+
+                      {{ guest.phone_number }}
+
+                    </div>
+
+                    <form method="GET">
+
+                      <input
+                        type="hidden"
+                        name="add_searched_guest"
+                        value="{{ guest.id }}"
+                      >
+
+                      <button
+                        type="submit"
+                        class="btn btn-success btn-sm w-100"
+                      >
+                        + Add Guest
+                      </button>
+
+                    </form>
+
+                  </div>
+
+                {% endfor %}
+
+              </div>
+
+            {% endif %}
+
+          </div>
+
+        </div>
+
+
+        <!-- ======================================
+             OR
+        ======================================= -->
+
+        <div class="or-divider">
+          OR
+        </div>
+
+
+        <!-- ======================================
+             CREATE NEW GUEST
+        ======================================= -->
+
+        <div class="dashboard-card">
+
+          <div class="card-header-custom">
+
+            <div class="card-header-title">
+
+              <div class="card-icon">
+                +
+              </div>
+
+              <div>
+                <h5>Add New Guest</h5>
+                <small>Create a new guest record</small>
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <div class="card-body-custom">
+
+            <form method="POST" class="new-guest-form">
+
+              {% csrf_token %}
+
+              {{ add_new_guest_form.as_p }}
+
+              <button
+                type="submit"
+                class="btn btn-primary w-100"
+              >
+                Add Guest
+              </button>
+
+            </form>
+
+          </div>
+
+        </div>

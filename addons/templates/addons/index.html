@@ -1,0 +1,519 @@
+
+{% extends "user/base.html" %}
+
+{% block title %}
+Add-ons
+{% endblock %}
+
+{% block page_title %}
+Add-ons
+{% endblock %}
+
+{% block content %}
+
+<style>
+  .addons-page {
+    background: #f8fafc;
+    min-height: calc(100vh - 100px);
+    padding: 25px 0 40px;
+  }
+
+  /* Header */
+  .addons-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+  }
+
+  .addons-header h2 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 700;
+    color: #111827;
+  }
+
+  .addons-header p {
+    margin: 4px 0 0;
+    color: #6b7280;
+    font-size: 14px;
+  }
+
+  .add-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 10px 16px;
+    border-radius: 8px;
+    background: #2563eb;
+    color: white;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    transition: 0.2s ease;
+  }
+
+  .add-button:hover {
+    background: #1d4ed8;
+    color: white;
+  }
+
+  /* Main card */
+  .addons-card {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+  }
+
+  .addons-card-header {
+    padding: 18px 20px;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .addons-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .addons-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background: #eff6ff;
+    color: #2563eb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+  }
+
+  .addons-card-header h5 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 650;
+    color: #111827;
+  }
+
+  .addons-card-header small {
+    color: #6b7280;
+  }
+
+  /* Table */
+  .addons-table-wrapper {
+    overflow-x: auto;
+  }
+
+  .addons-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .addons-table th {
+    padding: 13px 20px;
+    background: #f9fafb;
+    border-bottom: 1px solid #e5e7eb;
+    color: #6b7280;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    text-align: left;
+  }
+
+  .addons-table td {
+    padding: 16px 20px;
+    border-bottom: 1px solid #f0f0f0;
+    color: #374151;
+    font-size: 14px;
+    vertical-align: middle;
+  }
+
+  .addons-table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .addons-table tbody tr {
+    transition: background 0.15s ease;
+  }
+
+  .addons-table tbody tr:hover {
+    background: #fafafa;
+  }
+
+  /* Add-on name */
+  .addon-name-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .addon-avatar {
+    width: 38px;
+    height: 38px;
+    flex-shrink: 0;
+    border-radius: 9px;
+    background: #eff6ff;
+    color: #2563eb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+  }
+
+  .addon-name {
+    font-weight: 650;
+    color: #111827;
+  }
+
+  .addon-details {
+    color: #6b7280;
+    max-width: 400px;
+  }
+
+  /* Price */
+  .addon-price {
+    font-size: 15px;
+    font-weight: 700;
+    color: #16a34a;
+    white-space: nowrap;
+  }
+
+  /* Edit button */
+  .edit-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 7px 12px;
+    border: 1px solid #dbeafe;
+    border-radius: 7px;
+    background: #eff6ff;
+    color: #2563eb;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 600;
+    transition: 0.2s ease;
+  }
+
+  .edit-button:hover {
+    background: #dbeafe;
+    color: #1d4ed8;
+  }
+
+  /* Error */
+  .error-alert {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 15px;
+    margin-bottom: 20px;
+    border: 1px solid #fecaca;
+    border-radius: 8px;
+    background: #fef2f2;
+    color: #b91c1c;
+    font-size: 14px;
+  }
+
+  .error-icon {
+    font-size: 17px;
+  }
+
+  /* Empty state */
+  .empty-state {
+    text-align: center;
+    padding: 55px 20px;
+  }
+
+  .empty-icon {
+    width: 55px;
+    height: 55px;
+    margin: 0 auto 15px;
+    border-radius: 50%;
+    background: #f3f4f6;
+    color: #9ca3af;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 23px;
+  }
+
+  .empty-state h5 {
+    margin-bottom: 5px;
+    font-weight: 650;
+    color: #374151;
+  }
+
+  .empty-state p {
+    margin-bottom: 18px;
+    color: #6b7280;
+    font-size: 14px;
+  }
+
+  /* Responsive */
+  @media (max-width: 767px) {
+
+    .addons-page {
+      padding: 15px 0 30px;
+    }
+
+    .addons-header {
+      align-items: flex-start;
+      gap: 15px;
+    }
+
+    .addons-header h2 {
+      font-size: 21px;
+    }
+
+    .add-button {
+      padding: 9px 12px;
+      white-space: nowrap;
+    }
+
+    .addons-table {
+      min-width: 650px;
+    }
+
+  }
+</style>
+
+
+<div class="addons-page">
+
+  <div class="container-fluid px-3 px-md-4">
+
+    <!-- ==========================================
+         HEADER
+    =========================================== -->
+
+    <div class="addons-header">
+
+      <div>
+        <h2>Add-ons</h2>
+
+        <p>
+          Manage additional services and products offered by your hotel.
+        </p>
+      </div>
+
+      <a
+        href="{% url 'add_addon_view' %}"
+        class="add-button"
+      >
+        <span>+</span>
+        Add Add-on
+      </a>
+
+    </div>
+
+
+    <!-- ==========================================
+         ERROR
+    =========================================== -->
+
+    {% if error %}
+
+      <div class="error-alert">
+
+        <span class="error-icon">
+          ⚠
+        </span>
+
+        <span>
+          {{ error }}
+        </span>
+
+      </div>
+
+    {% endif %}
+
+
+    <!-- ==========================================
+         ADD-ONS CARD
+    =========================================== -->
+
+    <div class="addons-card">
+
+      <div class="addons-card-header">
+
+        <div class="addons-title">
+
+          <div class="addons-icon">
+            +
+          </div>
+
+          <div>
+
+            <h5>
+              Available Add-ons
+            </h5>
+
+            <small>
+              {% if addons %}
+                {{ addons|length }} add-on{{ addons|length|pluralize }}
+              {% else %}
+                No add-ons available
+              {% endif %}
+            </small>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      {% if addons %}
+
+        <div class="addons-table-wrapper">
+
+          <table class="addons-table">
+
+            <thead>
+
+              <tr>
+                <th>
+                  Add-on
+                </th>
+
+                <th>
+                  Details
+                </th>
+
+                <th>
+                  Price
+                </th>
+                <th>
+                  Status
+                </th>
+
+                <th>
+                  Action
+                </th>
+              </tr>
+
+            </thead>
+
+
+            <tbody>
+
+              {% for addon in addons %}
+
+                <tr>
+
+                  <!-- Name -->
+
+                  <td>
+
+                    <div class="addon-name-wrapper">
+
+                      <div class="addon-avatar">
+                        {{ addon.name|first|upper }}
+                      </div>
+
+                      <div class="addon-name">
+                        {{ addon.name }}
+                      </div>
+
+                    </div>
+
+                  </td>
+
+
+                  <!-- Details -->
+
+                  <td>
+
+                    <div class="addon-details">
+                      {{ addon.details }}
+                    </div>
+
+                  </td>
+
+
+                  <!-- Price -->
+
+                  <td>
+
+                    <div class="addon-price">
+                      ₹{{ addon.price }}
+                    </div>
+
+                  </td>
+
+                     <td>
+
+                    <div class="">
+                      {{ addon.status }}
+                    </div>
+
+                  </td>
+
+
+                  <!-- Action -->
+
+                  <td>
+
+                    <a
+                      href="{% url 'edit_addon_view' addon.id %}"
+                      class="edit-button"
+                    >
+                      ✎ Edit
+                    </a>
+
+                  </td>
+
+                </tr>
+
+              {% endfor %}
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      {% else %}
+
+        <!-- ======================================
+             EMPTY STATE
+        ======================================= -->
+
+        <div class="empty-state">
+
+          <div class="empty-icon">
+            +
+          </div>
+
+          <h5>
+            No add-ons yet
+          </h5>
+
+          <p>
+            Create your first add-on to offer additional services to guests.
+          </p>
+
+          <a
+            href="{% url 'add_addon_view' %}"
+            class="add-button"
+          >
+            + Add Add-on
+          </a>
+
+        </div>
+
+      {% endif %}
+
+    </div>
+
+  </div>
+
+</div>
+
+{% endblock %}
+
