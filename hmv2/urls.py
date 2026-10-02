@@ -1,7 +1,7 @@
 """
 URL configuration for hmv2 project.
 
-The `urlpatterns` list routes URLs to views. For more information please see:
+The `urlpatterns` list routes URLs to views. For more inf   ormation please see:
     https://docs.djangoproject.com/en/6.1/topics/http/urls/
 Examples:
 Function views
@@ -26,4 +26,7 @@ urlpatterns = [
     path("room/", include("room.urls")),
     path("guest/", include("guest.urls")),
     path('reservation/', include('reservation.urls')),
+    path('transaction/', include('transactions.urls')),
+    path('addons/', include('addons.urls')),
+    path('food/', include('foodcategory.urls')),
 ]

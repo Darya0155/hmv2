@@ -41,7 +41,10 @@ INSTALLED_APPS = [
     "hotel",
     "room",
     "guest",
-    "reservation"
+    "reservation",
+    "transactions",
+    "addons",
+    "foodcategory",
 ]
 
 MIDDLEWARE = [

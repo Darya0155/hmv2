@@ -1,0 +1,27 @@
+{% extends "user/base.html" %}
+
+{% block title %}
+Dashboard
+{% endblock %}
+
+{% block page_title %}
+Dashboard
+{% endblock %}
+
+{% block content %}
+
+
+
+<form method="POST" action="{% url 'edit_transaction_view' transactionId%}">
+      {% csrf_token%}
+      {{ transactionForm.as_p }}
+      <button type="submit">Update</button>
+</form>
+<form method="POST" action="{% url 'delete_transaction_view' transactionId%}">
+      {% csrf_token%}
+      <button type="submit">Delete</button>
+</form>
+
+{% endblock %}
+
+

@@ -1,0 +1,29 @@
+
+{% extends "user/base.html" %}
+
+{% block title %}
+Dashboard
+{% endblock %}
+
+{% block page_title %}
+Dashboard
+{% endblock %}
+
+{% block content %}
+
+
+
+
+{{msg}}
+<a href="{% url 'foodCategory_delete' category_id=category_id %}">Delete</a>
+<form method="POST">
+    {% csrf_token%}
+    {{food_category_form.as_p}}
+    <button type="submit">Update</button>
+</form>
+
+
+
+{% endblock %}
+
+

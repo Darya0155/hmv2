@@ -37,8 +37,14 @@
             <a href="{% url 'guest_view' %}" class="menu-item">
                 📊 <span>Guest</span>
             </a>
+            <a href="{% url 'addon_view' %}" class="menu-item">
+                📊 <span>Add ons</span>
+            </a>
             <a href="{% url 'reservation_view' %}" class="menu-item">
                 📊 <span>Booking</span>
+            </a>
+            <a href="{% url 'foodCategory_index' %}" class="menu-item">
+                📊 <span>Food Category</span>
             </a>
             <a href="{% url 'change_password' %}" class="menu-item">
                 📊 <span>Change Password</span>
@@ -87,7 +93,7 @@
 
     {% block extra_js %}{% endblock %}
 
-     script src="{% static 'js/popper.min.js' %}"></script>
+     <script src="{% static 'js/popper.min.js' %}"></script>
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
 
 </body>

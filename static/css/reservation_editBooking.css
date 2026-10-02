@@ -1,0 +1,177 @@
+.dashboard-container {
+    padding: 20px 0;
+  }
+
+  /* Reservation Information */
+  .reservation-card {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 25px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  }
+
+  .reservation-card h5 {
+    margin-bottom: 15px;
+    font-weight: 600;
+  }
+
+  .reservation-info {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 8px 15px;
+  }
+
+  .reservation-label {
+    font-weight: 600;
+    color: #555;
+  }
+
+  /* Guest Cards */
+  .guest-card {
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 12px;
+    background: #fff;
+    transition: box-shadow 0.2s ease;
+  }
+
+  .guest-card:hover {
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+  }
+
+  .guest-name {
+    font-size: 17px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  .guest-detail {
+    color: #666;
+    margin-bottom: 4px;
+  }
+
+  .guest-detail strong {
+    color: #333;
+  }
+
+  .guest-actions {
+    margin-top: 12px;
+  }
+
+  /* Section Heading */
+  .section-title {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 15px;
+  }
+
+  /* Search Box */
+  .search-card {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  }
+
+  .search-card label {
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  .search-button {
+    margin-top: 10px;
+  }
+
+  /* OR Divider */
+  .or-divider {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin: 30px 0;
+    color: #777;
+    font-weight: 600;
+  }
+
+  .or-divider::before,
+  .or-divider::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: #ddd;
+  }
+
+  /* New Guest Form */
+  .new-guest-card {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  }
+
+  .new-guest-card h5 {
+    font-weight: 600;
+    margin-bottom: 20px;
+  }
+
+  .new-guest-card p {
+    margin-bottom: 15px;
+  }
+
+  .new-guest-card label {
+    font-weight: 500;
+    margin-bottom: 5px;
+  }
+
+  .new-guest-card input,
+  .new-guest-card select,
+  .new-guest-card textarea {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+  }
+
+  .new-guest-card input:focus,
+  .new-guest-card select:focus,
+  .new-guest-card textarea:focus {
+    border-color: #86b7fe;
+    outline: none;
+    box-shadow: 0 0 0 0.15rem rgba(13, 110, 253, 0.15);
+  }
+
+  /* Empty State */
+  .empty-state {
+    padding: 25px;
+    text-align: center;
+    color: #777;
+    border: 1px dashed #ccc;
+    border-radius: 10px;
+    margin-bottom: 20px;
+  }
+
+  /* Responsive */
+  @media (max-width: 767px) {
+    .dashboard-container {
+      padding: 10px;
+    }
+
+    .reservation-info {
+      grid-template-columns: 1fr;
+      gap: 3px;
+    }
+
+    .reservation-label {
+      margin-top: 8px;
+    }
+
+    .col-sm-8,
+    .col-sm-4 {
+      margin-bottom: 20px;
+    }
+  }

@@ -1,0 +1,511 @@
+{% extends "user/base.html" %}
+
+{% block title %}Checkout{% endblock %}
+{% block page_title %}
+{% if reservation.status == "check_in" %}
+    Checkout
+{% else %}
+    View Bill
+{% endif %}
+
+{% endblock %}
+
+{% block content %}
+
+<style>
+    .invoice-wrapper {
+        background: #f3f4f6;
+        padding: 20px;
+    }
+
+    .invoice {
+        width: 210mm;
+        min-height: 297mm;
+        margin: auto;
+        padding: 10mm;
+        background: #fff;
+        color: #222;
+        font-size: 11px;
+        box-shadow: 0 1px 8px rgba(0,0,0,.08);
+    }
+
+    /* Header */
+    .invoice-header {
+        display: flex;
+        justify-content: space-between;
+        border-bottom: 1.5px solid #222;
+        padding-bottom: 8px;
+        margin-bottom: 10px;
+    }
+
+    .hotel-name {
+        font-size: 19px;
+        font-weight: 700;
+        margin-bottom: 2px;
+    }
+
+    .hotel-info {
+        font-size: 10px;
+        line-height: 1.35;
+        color: #555;
+    }
+
+    .invoice-title {
+        font-size: 17px;
+        font-weight: 700;
+        text-transform: uppercase;
+        text-align: right;
+    }
+
+    .invoice-subtitle {
+        font-size: 9px;
+        color: #777;
+        text-align: right;
+    }
+
+    /* Sections */
+    .section-title {
+        font-size: 10px;
+        font-weight: 700;
+        text-transform: uppercase;
+        border-bottom: 1px solid #aaa;
+        padding-bottom: 3px;
+        margin: 9px 0 4px;
+    }
+
+    /* Reservation */
+    .reservation-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .reservation-table td {
+        padding: 2px 5px;
+        line-height: 1.3;
+    }
+
+    .reservation-table td.label {
+        color: #777;
+        width: 13%;
+    }
+
+    .reservation-table td.value {
+        font-weight: 600;
+        width: 20%;
+    }
+
+    /* Guest table */
+    .guest-table,
+    .charges-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .guest-table th,
+    .guest-table td {
+        padding: 3px 5px;
+        border-bottom: 1px solid #ddd;
+        line-height: 1.25;
+    }
+
+    .guest-table th,
+    .charges-table th {
+        background: #f1f1f1;
+        font-weight: 600;
+    }
+
+    /* Charges */
+    .charges-table {
+        margin-top: 3px;
+    }
+
+    .charges-table th,
+    .charges-table td {
+        padding: 4px 4px;
+        border-bottom: 1px solid #ddd;
+        line-height: 1.2;
+    }
+
+    .charges-table thead th {
+        border-top: 1px solid #333;
+        border-bottom: 1px solid #333;
+    }
+
+    .text-right {
+        text-align: right !important;
+    }
+
+    .text-center {
+        text-align: center !important;
+    }
+
+    /* Total */
+    .total-container {
+        width: 280px;
+        margin-left: auto;
+        margin-top: 8px;
+    }
+
+    .total-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 3px 0;
+    }
+
+    .grand-total {
+        border-top: 1.5px solid #222;
+        margin-top: 3px;
+        padding-top: 5px;
+        font-size: 15px;
+        font-weight: 700;
+    }
+
+    /* Footer */
+    .invoice-footer {
+        border-top: 1px solid #ddd;
+        margin-top: 15px;
+        padding-top: 6px;
+        text-align: center;
+        font-size: 9px;
+        color: #777;
+        line-height: 1.3;
+    }
+
+    /* Buttons */
+    .print-actions {
+        width: 210mm;
+        margin: 10px auto;
+        display: flex;
+        justify-content: flex-end;
+        gap: 6px;
+    }
+
+
+    /* ============================
+       PRINT
+       ============================ */
+
+    @media print {
+
+        @page {
+            size: A4;
+            margin: 7mm;
+        }
+
+        html,
+        body {
+            width: 210mm;
+            margin: 0 !important;
+            padding: 0 !important;
+            background: #fff !important;
+        }
+
+        nav,
+        aside,
+        header,
+        footer,
+        .navbar,
+        .sidebar,
+        .print-actions,
+        .no-print {
+            display: none !important;
+        }
+
+        .invoice-wrapper {
+            padding: 0 !important;
+            margin: 0 !important;
+            background: #fff !important;
+        }
+
+        .invoice {
+            width: 100%;
+            min-height: auto;
+            margin: 0;
+            padding: 0;
+            box-shadow: none !important;
+            font-size: 10px;
+        }
+
+        .hotel-name {
+            font-size: 18px;
+        }
+
+        .invoice-title {
+            font-size: 16px;
+        }
+
+        .section-title {
+            margin-top: 7px;
+            margin-bottom: 3px;
+        }
+
+        .charges-table {
+            page-break-inside: auto;
+        }
+
+        .charges-table tr,
+        .guest-table tr {
+            page-break-inside: avoid;
+        }
+
+        .total-container {
+            page-break-inside: avoid;
+        }
+
+        .invoice-footer {
+            page-break-inside: avoid;
+        }
+    }
+</style>
+
+
+<div class="invoice-wrapper">
+
+    <!-- Buttons -->
+    <div class="print-actions no-print">
+        {% if reservation.status == "check_in" %}
+            <form method="POST">
+                    {% csrf_token%}
+                <button
+                    type="sumbit"
+                    class="btn btn-outline-secondary btn-sm"
+                >
+                    Checkout
+                </button>
+            </form>
+        {% endif %}
+        <button
+            type="button"
+            class="btn btn-primary btn-sm"
+            onclick="window.print()">
+            Print
+        </button>
+
+        <button
+            type="button"
+            class="btn btn-outline-secondary btn-sm"
+            onclick="window.history.back()">
+            Back
+        </button>
+
+    </div>
+
+
+    <!-- A4 -->
+    <div class="invoice">
+
+        <!-- HEADER -->
+        <div class="invoice-header">
+
+            <div>
+                <div class="hotel-name">
+                    {{ hotel.name }}
+                </div>
+
+                <div class="hotel-info">
+                    {{ hotel.address }}<br>
+                    GSTIN: {{ hotel.gst_number }} |
+                    Phone: {{ hotel.phone_number }} |
+                    {{ hotel.email }}
+                </div>
+            </div>
+
+            <div>
+                <div class="invoice-title">
+                    Checkout
+                </div>
+
+                <div class="invoice-subtitle">
+                    Hotel Invoice
+                </div>
+            </div>
+
+        </div>
+
+
+        <!-- RESERVATION -->
+        <div class="section-title">
+            Reservation Details
+        </div>
+
+        <table class="reservation-table">
+
+            <tr>
+                <td class="label">Room</td>
+                <td class="value">
+                    {{ room.room_number }}
+                </td>
+
+                <td class="label">Check-in</td>
+                <td class="value">
+                    {{ reservation.check_in|date:'d M Y' }}
+                </td>
+
+                <td class="label">Check-out</td>
+                <td class="value">
+                    {{ reservation.check_out|date:'d M Y' }}
+                </td>
+
+                <td class="label">Guests</td>
+                <td class="value">
+                    {{ guests|length }}
+                </td>
+                <td class="label">Nights</td>
+                <td class="value">
+                    {{ reservation.days|length }}
+                </td>
+            </tr>
+
+        </table>
+
+
+        <!-- GUESTS -->
+        <div class="section-title">
+            Guest Details
+        </div>
+
+        <table class="guest-table">
+
+            <thead>
+                <tr>
+                    <th style="width: 6%;">#</th>
+                    <th style="width: 25%;">Name</th>
+                    <th>Address</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% for guest in guests %}
+
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ guest.name }}</td>
+                    <td>{{ guest.address }}</td>
+                </tr>
+
+                {% empty %}
+
+                <tr>
+                    <td colspan="3" class="text-center">
+                        No guest information available.
+                    </td>
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+
+        <!-- CHARGES -->
+        <div class="section-title">
+            Charges
+        </div>
+
+        <table class="charges-table">
+
+            <thead>
+                <tr>
+                    <th style="width: 13%;">Type</th>
+                    <th>Details</th>
+                    <th class="text-right" style="width: 10%;">
+                        Price
+                    </th>
+                    <th class="text-center" style="width: 7%;">
+                        Qty
+                    </th>
+                    <th class="text-right" style="width: 9%;">
+                        SGST
+                    </th>
+                    <th class="text-right" style="width: 9%;">
+                        CGST
+                    </th>
+                    <th class="text-right" style="width: 12%;">
+                        Total
+                    </th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% for transaction in transactions %}
+
+                <tr>
+
+                    <td>
+                        {{ transaction.type }}
+                    </td>
+
+                    <td>
+                        {{ transaction.details }}
+                    </td>
+
+                    <td class="text-right">
+                        ₹{{ transaction.price }}
+                    </td>
+
+                    <td class="text-center">
+                        {{ transaction.quantity }}
+                    </td>
+
+                    <td class="text-right">
+                        {{ transaction.state_tax_percentage }}%
+                    </td>
+
+                    <td class="text-right">
+                        {{ transaction.central_tax_percentage }}%
+                    </td>
+
+                    <td class="text-right">
+                        ₹{{ transaction.total_price }}
+                    </td>
+
+                </tr>
+
+                {% empty %}
+
+                <tr>
+                    <td colspan="7" class="text-center">
+                        No transactions found.
+                    </td>
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+
+        <!-- TOTAL -->
+        <div class="total-container">
+
+            <div class="total-row">
+                <span>Subtotal</span>
+                <span>₹{{ total_amount }}</span>
+            </div>
+
+            <div class="total-row grand-total">
+                <span>Total Amount</span>
+                <span>₹{{ total_amount }}</span>
+            </div>
+
+        </div>
+
+
+        <!-- FOOTER -->
+        <div class="invoice-footer">
+
+            Thank you for staying with us.<br>
+            This is a computer-generated invoice and does not require a signature.
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+```

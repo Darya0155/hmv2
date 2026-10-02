@@ -1,0 +1,124 @@
+<div class="dashboard-card">
+
+          <div class="card-header-custom">
+
+            <div class="card-header-title">
+
+              <div class="card-icon">
+                👥
+              </div>
+
+              <div>
+                <h5>Current Guests</h5>
+
+                <small>
+                  {% if current_guest_list %}
+                    {{ current_guest_list|length }} guest{{ current_guest_list|length|pluralize }}
+                  {% else %}
+                    No guests added
+                  {% endif %}
+                </small>
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <div class="card-body-custom">
+
+            {% if current_guest_list %}
+
+              <div class="guest-list">
+
+                {% for currentGuest in current_guest_list %}
+
+                  <div class="guest-card">
+
+                    <div class="guest-main">
+
+                      <div class="guest-avatar">
+                        {{ currentGuest.name|first|upper }}
+                      </div>
+
+                      <div>
+
+                        <div class="guest-name">
+                          {{ currentGuest.name }}
+                        </div>
+
+                        <div class="guest-details">
+
+                          <div class="guest-detail">
+                            <strong>Phone:</strong>
+                            {{ currentGuest.phone_number }}
+                          </div>
+
+                          <div class="guest-detail">
+                            <strong>ID:</strong>
+                            {{ currentGuest.id_type }} -
+                            {{ currentGuest.id_value }}
+                          </div>
+
+                        </div>
+
+                        <div class="guest-meta">
+                          {{ currentGuest.address }}
+                        </div>
+
+                      </div>
+
+                    </div>
+
+
+                    <div class="guest-actions">
+
+                      <form method="GET">
+
+                        <input
+                          type="hidden"
+                          name="delete_current_guest"
+                          value="{{ currentGuest.id }}"
+                        >
+
+                        <button
+                          type="submit"
+                          class="btn btn-outline-danger btn-sm"
+                        >
+                          Remove
+                        </button>
+
+                      </form>
+
+                    </div>
+
+                  </div>
+
+                {% endfor %}
+
+              </div>
+
+            {% else %}
+
+              <div class="empty-state">
+
+                <div class="empty-icon">
+                  👤
+                </div>
+
+                <div style="font-weight: 600; color: #374151;">
+                  No guests added
+                </div>
+
+                <div style="font-size: 13px;">
+                  Add an existing guest or create a new guest.
+                </div>
+
+              </div>
+
+            {% endif %}
+
+          </div>
+
+        </div>
